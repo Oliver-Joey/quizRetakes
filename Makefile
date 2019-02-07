@@ -35,3 +35,6 @@ courseReader.class : courseReader.java courseBean.class
 
 courseBean.class : courseBean.java
 	cd ..; javac quizretakes/courseBean.java ; cd quizretakes
+
+clean:
+	rm *.class
