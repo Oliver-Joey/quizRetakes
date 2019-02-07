@@ -111,88 +111,102 @@ public class quizschedule
       printQuizScheduleForm (quizList, retakesList, course);
     } catch (Exception e)
     {
-      String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
+      String message = "Can't find the data files for course ID " + courseID + ". You can try again.";
     }
+    scanner.nextLine();
+    System.out.println("\nInput name: ");
+    String name = scanner.nextLine();
+    //scanner.nextLine();
+    System.out.println("Input Date of Quiz Retake: ");
+    String id = scanner.nextLine();
+    String array[] =new String[1];
+    array[0] = id;
+    
+    doPost(courseID,name,array);
   }
   
-// doPost saves an appointment in a file and prints an acknowledgement
-  /*@Override
-  protected void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException
-  {
-    // No saving if IOException
-    boolean IOerrFlag = false;
-    String IOerrMessage = "";
-    
-    // Filename to be built from above and the courseID
-    courseID = request.getParameter("courseID");
-    String apptsFileName   = dataLocation + apptsBase + "-" + courseID + ".txt";
-    
-    // Get name and list of retake requests from parameters
-    String studentName = request.getParameter ("studentName");
-    String[] allIDs    = request.getParameterValues ("retakeReqs");
-    
-    response.setContentType ("text/html");
-    PrintWriter out = response.getWriter ();
-    servletUtils.printHeader (out);
-    out.println ("<body bgcolor=\"#DDEEDD\">");
-    
-    if(allIDs != null && studentName != null && studentName.length() > 0)
-    {
+protected static void doPost (String courseID, String studentName, String[] allIDs) {
+
+{
+   // No saving if IOException
+   boolean IOerrFlag = false;
+   String IOerrMessage = "";
+
+   // Filename to be built from above and the courseID
+
+   //courseID = request.getParameter("courseID");
+
+   String apptsFileName   = dataLocation + apptsBase + "-" + courseID + ".txt";
+
+   // Get name and list of retake requests from parameters
+
+   //String studentName = request.getParameter ("studentName");
+
+   //String[] allIDs    = request.getParameterValues ("retakeReqs");
+
+   //response.setContentType ("text/html");
+
+   //PrintWriter out = response.getWriter ();
+
+   //servletUtils.printHeader (out);
+
+   //out.println ("<body bgcolor=\"#DDEEDD\">");
+  
+   if(allIDs != null && studentName != null && studentName.length() > 0)
+   {
       // Append the new appointment to the file
       try {
-        File file = new File(apptsFileName);
-        synchronized(file)
-        { // Only one student should touch this file at a time.
-          if (!file.exists())
-          {
-            file.createNewFile();
-          }
-          FileWriter     fw = new FileWriter(file.getAbsoluteFile(), true); //append mode
-          BufferedWriter bw = new BufferedWriter(fw);
-          
-          for(String oneIDPair : allIDs)
-          {
-            bw.write(oneIDPair + separator + studentName + "\n");
-          }
-          
-          bw.flush();
-          bw.close();
-        } // end synchronize block
+         File file = new File(apptsFileName);
+         synchronized(file)
+         { // Only one student should touch this file at a time.
+            if (!file.exists())
+            {
+               file.createNewFile();
+            }
+            FileWriter     fw = new FileWriter(file.getAbsoluteFile(), true); //append mode
+            BufferedWriter bw = new BufferedWriter(fw);
+            for(String oneIDPair : allIDs)
+            {
+               bw.write(oneIDPair + separator + studentName + "\n");
+            }
+            bw.flush();
+            bw.close();
+         } // end synchronize block
       } catch (IOException e) {
-        IOerrFlag = true;
-        IOerrMessage = "I failed and could not save your appointment." + e;
+         IOerrFlag = true;
+         IOerrMessage = "I failed and could not save your appointment." + e;
       }
-      
       // Respond to the student
       if (IOerrFlag)
       {
-        out.println ("<p>");
-        out.println (IOerrMessage);
+         System.out.println (IOerrMessage);
       } else {
-        out.println ("<p>");
-        if (allIDs.length == 1)
-          out.println (studentName + ", your appointment has been scheduled.");
-        else
-          out.println (studentName + ", your appointments have been scheduled.");
-        out.println ("<p>Please arrive in time to finish the quiz before the end of the retake period.");
-        out.println ("<p>If you cannot make it, please cancel by sending email to your professor.");
+         if (allIDs.length == 1)
+             System.out.println (studentName + ", your appointment has been scheduled.");
+         else
+             System.out.println (studentName + ", your appointments have been scheduled.");
+          System.out.println ("Please arrive in time to finish the quiz before the end of the retake period.");
+          System.out.println ("If you cannot make it, please cancel by sending email to your professor.");
       }
-      
-    } else { // allIDs == null or name is null
-      out.println ("<body bgcolor=\"#DDEEDD\">");
+   } else { // allIDs == null or name is null
+
       if(allIDs == null)
-        out.println ("<p>You didn't choose any quizzes to retake.");
-      if(studentName == null || studentName.length() == 0)
-        out.println ("<p>You didn't give a name ... no anonymous quiz retakes.");
-      
-      thisServlet = (request.getRequestURL()).toString();
+          System.out.println ("<p>You didn't choose any quizzes to retake.");
+      if (studentName == null || studentName.length() == 0)
+          System.out.println ("<p>You didn't give a name ... no anonymous quiz retakes.");
+      //thisServlet = (request.getRequestURL()).toString();
+
       // CS server has a flaw--requires https & 8443, but puts http & 8080 on the requestURL
-      thisServlet = thisServlet.replace("http", "https");
-      thisServlet = thisServlet.replace("8080", "8443");
-      out.println("<p><a href='" + thisServlet + "?courseID=" + courseID + "'>You can try again if you like.</a>");
+
+      //thisServlet = thisServlet.replace("http", "https");
+
+      //thisServlet = thisServlet.replace("8080", "8443");
+
+      //System.out.println("<p><a href='" + thisServlet + "?courseID=" + courseID + "'>You can try again if you like.</a>");
+   }
     }
-    servletUtils.printFooter (out);
-  }
+   //servletUtils.printFooter (out);
+}
   
   /**
    * Print the body of HTML
