@@ -46,8 +46,7 @@ public class quizschedule
   // Data files
   // location maps to /webapps/offutt/WEB-INF/data/ from a terminal window.
   // These names show up in all servlets
-  //private static final String dataLocation    = "/var/www/CS/webapps/offutt/WEB-INF/data/";
-  private static final String dataLocation    = "/Users/PeterName/Desktop/quizretakes/";
+  private static final String dataLocation    = "/var/www/CS/webapps/offutt/WEB-INF/data/";
   static private final String separator = ",";
   private static final String courseBase   = "course";
   private static final String quizzesBase = "quiz-orig";
@@ -74,11 +73,12 @@ public class quizschedule
     System.out.println("Input the course ID (Format:swe437): ");
     Scanner scanner = new Scanner(System.in);
     courseID = scanner.next();
-    courseBean course = null;
+    courseBean course;
     
     // CourseID must be a parameter (also in course XML file, but we need to know which course XML file ...)
     if (courseID != null)
-    {   
+    {  
+      
       courseReader cr = new courseReader();
       courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
       try 
@@ -114,6 +114,65 @@ public class quizschedule
       String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
     }
   }
+  
+// doGet() : Prints the form to schedule a retake
+  /*@Override
+  protected void doGet (HttpServletRequest request, HttpServletResponse response) throws IOException
+  {
+    response.setContentType ("text/html");
+    PrintWriter out = response.getWriter ();
+    servletUtils.printHeader (out);
+    
+    // Whoami? (Used in form)
+    thisServlet = (request.getRequestURL()).toString();
+    // CS server has a flaw--requires https & 8443, but puts http & 8080 on the requestURL
+    thisServlet = thisServlet.replace("http", "https");
+    thisServlet = thisServlet.replace("8080", "8443");
+    
+    // CourseID must be a parameter (also in course XML file, but we need to know which course XML file ...)
+    courseID = request.getParameter("courseID");
+    if (courseID != null && !courseID.isEmpty())
+    {  // If not, ask for one.
+      courseBean course;
+      courseReader cr = new courseReader();
+      courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
+      try {
+        course = cr.read(courseFileName);
+      } catch (Exception e) {
+        String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
+        servletUtils.printNeedCourseID (out, thisServlet, message);
+        servletUtils.printFooter (out);
+        return;
+      }
+      daysAvailable = Integer.parseInt(course.getRetakeDuration());
+      
+      // Filenames to be built from above and the courseID
+      String quizzesFileName = dataLocation + quizzesBase + "-" + courseID + ".xml";
+      String retakesFileName = dataLocation + retakesBase + "-" + courseID + ".xml";
+      String apptsFileName   = dataLocation + apptsBase   + "-" + courseID + ".txt";
+      
+      // Load the quizzes and the retake times from disk
+      quizzes quizList    = new quizzes();
+      retakes retakesList = new retakes();
+      quizReader    qr = new quizReader();
+      retakesReader rr = new retakesReader();
+      
+      try { // Read the files and print the form
+        quizList    = qr.read (quizzesFileName);
+        retakesList = rr.read (retakesFileName);
+        printQuizScheduleForm (out, quizList, retakesList, course);
+      } catch (Exception e)
+      {
+        String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
+        servletUtils.printNeedCourseID (out, thisServlet, message);
+      }
+    }
+    else
+    {
+      servletUtils.printNeedCourseID (out, thisServlet, "");
+    }
+    servletUtils.printFooter (out);
+  }*/
   
 // doPost saves an appointment in a file and prints an acknowledgement
   /*@Override
@@ -208,16 +267,19 @@ public class quizschedule
     LocalDate endSkip   = course.getEndSkip();
     
     boolean retakePrinted = false;
-   
-    System.out.println ("");
-    System.out.println ("GMU quiz retake scheduler for class " + course.getCourseTitle());
-    System.out.println ("");
+    
+    /*out.println ("<body onLoad=\"setFocusMain()\" bgcolor=\"#DDEEDD\">");
+    out.println ("");
+    out.println ("<center><h2>GMU quiz retake scheduler for class " + course.getCourseTitle() + "</h2></center>");
+    out.println ("<hr/>");
+    out.println ("");
     
     // print the main form
-    System.out.print   ("You can sign up for quiz retakes within the next two weeks. \n");
-    System.out.print   ("Enter your name (as it appears on the class roster), ");
-    System.out.println ("then select which date, time, and quiz you wish to retake from the following list.\n");
-
+    out.println ("<form name='quizSchedule' method='post' action='" + thisServlet + "?courseID=" + courseID + "' >");
+    out.print   ("  <p>You can sign up for quiz retakes within the next two weeks. ");
+    out.print   ("Enter your name (as it appears on the class roster), ");
+    out.println ("then select which date, time, and quiz you wish to retake from the following list.");
+    out.println ("  <br/>");*/
     
     LocalDate today  = LocalDate.now();
     LocalDate endDay = today.plusDays(new Long(daysAvailable));
@@ -229,11 +291,19 @@ public class quizschedule
       skip = true;
     }
     
-    System.out.print   ("Today is ");
-    System.out.println ((today.getDayOfWeek()) + ", " + today.getMonth() + " " + today.getDayOfMonth() );
-    System.out.print   ("Currently scheduling quizzes for the next two weeks, until ");
-    System.out.println ((endDay.getDayOfWeek()) + ", " + endDay.getMonth() + " " + endDay.getDayOfMonth() +"\n");
+    /*out.print   ("  <p>Today is ");
+    out.println ((today.getDayOfWeek()) + ", " + today.getMonth() + " " + today.getDayOfMonth() );
+    out.print   ("  <p>Currently scheduling quizzes for the next two weeks, until ");
+    out.println ((endDay.getDayOfWeek()) + ", " + endDay.getMonth() + " " + endDay.getDayOfMonth() );
+    out.println ("  <br/>");
     
+    out.print   ("  <p>Name: ");
+    out.println ("  <input type='text' id='studentName' name='studentName' size='50' />");
+    out.println ("  <br/>");
+    out.println ("  <br/>");
+    
+    out.println ("  <table border=1 style='background-color:#99dd99'><tr><td>"); // outer table for borders
+    out.println ("  <tr><td>");*/
     for(retakeBean r: retakesList)
     {
       LocalDate retakeDay = r.getDate();
@@ -242,16 +312,20 @@ public class quizschedule
         // if skip && retakeDay is after the skip week, print a white bg message
         if (skip && retakeDay.isAfter(origEndDay))
         {  // A "skip" week such as spring break.
-          System.out.println ("Skipping a week, no quiz or retakes.");
+          /*out.println ("    <table border=1 width=100% style='background-color:white'>"); // inner table to format skip week
+          out.println ("      <tr><td>Skipping a week, no quiz or retakes.");
+          out.println ("    </table>"); // inner table for skip week*/
           // Just print for the FIRST retake day after the skip week
           skip = false;
         }
         retakePrinted = true;
+        /*out.println ("    <table width=100%>"); // inner table to format one retake
         // format: Friday, January 12, at 10:00am in EB 4430
-        System.out.println (retakeDay.getDayOfWeek() + " " + retakeDay.getMonth() + " " +
+        out.println ("    <tr><td>" + retakeDay.getDayOfWeek() + ", " +
+                     retakeDay.getMonth() + " " +
                      retakeDay.getDayOfMonth() + ", at " +
                      r.timeAsString() + " in " +
-                     r.getLocation());
+                     r.getLocation());*/
         
         for(quizBean q: quizList)
         {
@@ -264,21 +338,37 @@ public class quizschedule
           if (!quizDay.isAfter(retakeDay) && !retakeDay.isAfter(lastAvailableDay) &&
               !today.isAfter(retakeDay) && !retakeDay.isAfter(endDay))
           {
+           /* out.println ("    <tr><td align='right'><label for='q" + q.getID() + "r" + r.getID() + "'>Quiz " + q.getID() + " from " + quizDay.getDayOfWeek() + ", " + quizDay.getMonth() + " " + quizDay.getDayOfMonth() + ":</label> ");
             // Value is "retakeID:quiziD"
+            out.println ("    <td><input type='checkbox' name='retakeReqs'  value='" + r.getID() + separator + q.getID() + "' id='q" + q.getID() + "r" + r.getID() + "'>");*/
           }
         }
       }
       if (retakePrinted)
       {
+        /*out.println ("  </table>");
+        out.println ("  <tr><td>");*/
         retakePrinted = false;
       }
     }
-   
-    System.out.println ("All quiz retake opportunities");
+    /*out.println ("  <tr><td align='middle'><button id='submitRequest' type='submit' name='submitRequest' style='font-size:large'>Submit request</button>");
+    out.println ("  </table>");
+    out.println ("</form>");
+    
+    
+    out.println ("<br/>");
+    out.println ("<br/>");
+    out.println ("<br/>");
+    out.println ("<br/>");
+    out.println ("<table border=1>");
+    out.println ("<tr><td align='middle'>All quiz retake opportunities</td></tr>");*/
     for(retakeBean r: retakesList)
     {
-      System.out.print(r);
+      /*out.print   ("  <tr><td>");
+      out.print   (r);
+      out.println ("  </td></td>");*/
     }
+    //out.println ("</table>");
   }
   
 } // end quizschedule class

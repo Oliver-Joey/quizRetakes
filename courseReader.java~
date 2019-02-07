@@ -39,18 +39,18 @@ System.out.println("In course Reader, fileName: " +filename);
    DocumentBuilder builder = factory.newDocumentBuilder();
    Document document = builder.parse (new File (filename));
 
-//System.out.println("In course Reader");
+System.out.println("In course Reader");
    // Get all the nodes
    NodeList nodeList = document.getDocumentElement().getChildNodes();
    for (int i = 0; i < nodeList.getLength(); i++)
    {
-//3System.out.println("course Reader, i=" +i);
+System.out.println("course Reader, i=" +i);
       // XML structure is simple--6 elements
       // Not validating the data values
       Node node = nodeList.item(i);
       if (node.getNodeType() == Node.ELEMENT_NODE)
       {
-//System.out.println("course Reader, in if");
+System.out.println("course Reader, in if");
          Element elem = (Element) node;
 
          // quiz IDs should be unique
