@@ -25,7 +25,7 @@ public class Student
   // location maps to /webapps/offutt/WEB-INF/data/ from a terminal window.
   // These names show up in all servlets
   //private static final String dataLocation    = "/var/www/CS/webapps/offutt/WEB-INF/data/";
-  private static final String dataLocation    = "/Users/PeterName/Desktop/quizretakes/";
+  private static final String dataLocation    = "/home/goodkindofwyrd/Documents/College/Classes/SWE_437/quizretakes/";
   static private final String separator = ",";
   private static final String courseBase   = "course";
   private static final String quizzesBase = "quiz-orig";
@@ -44,10 +44,14 @@ public class Student
   // Number of days a retake is offered after the quiz is given
   private static int daysAvailable = 14;
   
-  public Student(){}
+  public Student()
+  {
+  }
   
   protected static void doGet(String courseID)
   {
+    Scanner scanner = new Scanner(System.in);
+
     courseBean course = null;
     if (courseID != null)
     {   
@@ -58,7 +62,7 @@ public class Student
         course = cr.read(courseFileName);
       } catch (Exception e) 
       {
-        String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
+        String message = "Can't find the data files for course ID " + courseID + ". You can try again.";
         return;
       }
       daysAvailable = Integer.parseInt(course.getRetakeDuration());
@@ -85,6 +89,17 @@ public class Student
     {
       String message = "Can't find the data files for course ID " + courseID + ". You can try again.";
     }
+
+    System.out.println("\nInput name: ");
+    String name = scanner.nextLine();
+    //scanner.nextLine();
+    System.out.println("Input Date of Quiz Retake: ");
+    String id = scanner.nextLine();
+    String array[] =new String[1];
+    array[0] = id;
+
+    doPost(courseID,name,array);
+
   }
   
   protected static void doPost (String courseID, String studentName, String[] allIDs) 
@@ -139,9 +154,9 @@ public class Student
       else 
       { // allIDs == null or name is null
         if(allIDs == null)
-          System.out.println ("<p>You didn't choose any quizzes to retake.");
+          System.out.println ("You didn't choose any quizzes to retake.");
         if (studentName == null || studentName.length() == 0)
-          System.out.println ("<p>You didn't give a name ... no anonymous quiz retakes.");
+          System.out.println ("You didn't give a name ... no anonymous quiz retakes.");
       }
     }
   }
