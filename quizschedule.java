@@ -47,7 +47,7 @@ public class quizschedule
   // location maps to /webapps/offutt/WEB-INF/data/ from a terminal window.
   // These names show up in all servlets
   //private static final String dataLocation    = "/var/www/CS/webapps/offutt/WEB-INF/data/";
-  private static final String dataLocation    = "/Users/PeterName/Desktop/quizretakes/";
+  private static final String dataLocation    = "/home/goodkindofwyrd/Documents/College/Classes/SWE_437/quizretakes/";
   static private final String separator = ",";
   private static final String courseBase   = "course";
   private static final String quizzesBase = "quiz-orig";
@@ -71,58 +71,26 @@ public class quizschedule
   
   public static void main(String [] args)
   {
-    System.out.println("Input the course ID (Format:swe437): ");
+    String tOrS;
     Scanner scanner = new Scanner(System.in);
-    courseID = scanner.next();
-    courseBean course = null;
     
-    // CourseID must be a parameter (also in course XML file, but we need to know which course XML file ...)
-    if (courseID != null)
-    {   
-      courseReader cr = new courseReader();
-      courseFileName = dataLocation + courseBase + "-" + courseID + ".xml";
-      try 
-      {
-        course = cr.read(courseFileName);
-      } catch (Exception e) 
-      {
-        String message = "<p>Can't find the data files for course ID " + courseID + ". You can try again.";
-        return;
-      }
-      daysAvailable = Integer.parseInt(course.getRetakeDuration());
+    System.out.println("Hello!\nAre you a 'Professor' or 'Student'?\n");
+    tOrS = scanner.next();
+
+    if(tOrS.toLowerCase().equals("professor")){
+	System.out.println("Welcome to teacher mode");
+	Professor pro = new Professor();
+	pro.displayRetakes();
     }
-    
-    // Filenames to be built from above and the courseID
-    String quizzesFileName = dataLocation + quizzesBase + "-" + courseID + ".xml";
-    String retakesFileName = dataLocation + retakesBase + "-" + courseID + ".xml";
-    String apptsFileName   = dataLocation + apptsBase   + "-" + courseID + ".txt";
-    
-    // Load the quizzes and the retake times from disk
-    quizzes quizList    = new quizzes();
-    retakes retakesList = new retakes();
-    quizReader    qr = new quizReader();
-    retakesReader rr = new retakesReader();
-    
-    // Read the files and print the form
-    try 
-    { 
-      quizList    = qr.read (quizzesFileName);
-      retakesList = rr.read (retakesFileName);
-      printQuizScheduleForm (quizList, retakesList, course);
-    } catch (Exception e)
-    {
-      String message = "Can't find the data files for course ID " + courseID + ". You can try again.";
+    else if(tOrS.toLowerCase().equals("student")){
+    	System.out.println("Input the course ID (Format:swe437): ");
+    	courseID = scanner.next();
+    	courseBean course = null;
+
+    	Student stu = new Student();
+
+	stu.doGet(courseID);
     }
-    scanner.nextLine();
-    System.out.println("\nInput name: ");
-    String name = scanner.nextLine();
-    //scanner.nextLine();
-    System.out.println("Input Date of Quiz Retake: ");
-    String id = scanner.nextLine();
-    String array[] =new String[1];
-    array[0] = id;
-    
-    doPost(courseID,name,array);
   }
   
 protected static void doPost (String courseID, String studentName, String[] allIDs) {
