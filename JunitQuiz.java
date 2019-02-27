@@ -1,15 +1,8 @@
 //JunitQuiz.java
 
-
 import org.junit.*;
-import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-
-import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
 
 import java.util.*;
 import java.time.*;
@@ -17,66 +10,59 @@ import junit.framework.TestCase;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-@RunWith (Theories.class)
-
-public class JunitQuiz extends TestCase 
+public class JunitQuiz 
 {
-  
-  //Fake datapoint
-  @DataPoint public static int input1 = 1;
-  
-  @Theory public void test_printQuizScheduleForm(int input1)
+  //Testing printQuizScheduleForm
+  @Test
+  public void testPrintQuizzesInRange() 
   {
-    //Assumptions
-    
-    //Retrieves System.out output to use for later testing
     ByteArrayOutputStream output = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(output);
     PrintStream system_output = System.out;
     System.setOut(ps);
     
-    //Sets date for the retakes
     LocalDate today  = LocalDate.now();
-    LocalDate endDay = today.plusDays(new Long(14));
+    LocalDate endDay = today.plusDays(new Long(21));
     
-    
-    //QUIZLIST: Sets the list of quizzes taken
     quizretakes.quizzes quizList = new quizretakes.quizzes();
-    quizretakes.quizBean q1 = new quizretakes.quizBean (11, 3, 1, 11, 15);
-    quizretakes.quizBean q2 = new quizretakes.quizBean (22, 3, 1, 6, 20);
-    quizretakes.quizBean q3 = new quizretakes.quizBean (33, 3, 1, 10, 25);
-    quizList.addQuiz(q1);
-    quizList.addQuiz(q2);
-    quizList.addQuiz(q3);
-    
-    //RETAKESLIST: Sets the list of available retakes
-    quizretakes.retakes retakesList = new quizretakes.retakes() ;
-    quizretakes.retakeBean r1 = new quizretakes.retakeBean (1, "Robinson", 3, 1, 12, 30);
-    quizretakes.retakeBean r2 = new quizretakes.retakeBean (2, "Fenwick", 3, 2, 7, 30);
-    quizretakes.retakeBean r3 = new quizretakes.retakeBean (3, "Engineering", 3, 3, 11, 30);
-    retakesList.addRetake(r1);
-    retakesList.addRetake(r2);
-    retakesList.addRetake(r3);
-    
-    //Sets up the course
+    quizretakes.retakes retakesList = new quizretakes.retakes();
     quizretakes.courseBean course = new quizretakes.courseBean("SWE437", "Software testing", "2 Weeks" , today, endDay, "Buchanan Hall");
     
-    //Testing printQuizScheduleForm
+    assumeTrue(quizList != null);
+    assumeTrue(retakesList != null);
+    assumeTrue(course != null);
+    
+    //QUIZLIST: Sets the list of quizzes taken
+    quizretakes.quizBean q1 = new quizretakes.quizBean (1234, 3, 1, 12, 30);
+    quizList.addQuiz(q1);
+    
+    //RETAKESLIST: Sets the list of available retakes
+    quizretakes.retakeBean r1 = new quizretakes.retakeBean (1234, "Robinson", 3, 1, 12, 30);
+    retakesList.addRetake(r1);
+    
+    //Calls printQuizScheduleForm
     quizretakes.quizschedule.printQuizScheduleForm(quizList, retakesList, course);
     
-    //After printQuizScheduleForm prints to System.out, stores and prints out what was printed to System.out
+    String expected =("\n\n******************************************************************************\n");
+    expected +=("GMU quiz retake scheduler for class " + course.getCourseTitle() + "\n");
+    expected +=("******************************************************************************\n\n\n");
+    expected +=("You can sign up for quiz retakes within the next two weeks. \n");
+    expected +=("Enter your name (as it appears on the class roster), \n");
+    expected +=("then select which date, time, and quiz you wish to retake from the following list.\n\n");
+    expected +=(("Today is ")+(today.getDayOfWeek()) + ", " + today.getMonth() + " " + today.getDayOfMonth() +"\n");
+    expected +=("Currently scheduling quizzes for the next two weeks, until ");
+    expected +=((endDay.getDayOfWeek()) + ", " + endDay.getMonth() + " " + endDay.getDayOfMonth() +"\n");
+    
+    LocalDate retakeDay1 = r1.getDate();
+    String retake1 = ("RETAKE: " + retakeDay1.getDayOfWeek() + ", " + retakeDay1.getMonth() + " " +
+                      retakeDay1.getDayOfMonth() + ", at " + r1.timeAsString() + " in " +
+                      r1.getLocation() +("\n    1) Quiz 1234 from FRIDAY, MARCH 1\n\n"));
+    expected += retake1;
+    
     System.out.flush();
     System.setOut(system_output);
-    System.out.println("TESTING OUTPUT: " + output.toString());
     
-    //String samplestring = "
-    
-    //assertTrue(output.toString().equals(samplestring));
-    
-    //Assertions
-    assertTrue(quizList != null);
-    assertTrue(retakesList != null);
-    assertTrue(course != null);
-    
-  }
+    //Asserts that actual output is the same as expected output
+    assertTrue(expected.equals(output.toString()));
+  } 
 }
