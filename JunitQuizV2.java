@@ -66,7 +66,18 @@ public class JunitQuizV2 {
         System.setOut(system_output);
 
         //ASSERTION: actual output is the same as expected output
-        assertTrue(expected.equals(output.toString()));
+        try{
+          assertTrue(expected.equals(output.toString()));
+          
+          System.out.println("expected:" + expected);
+          System.out.println("actual:" + output.toString());
+          
+        }catch(AssertionError e){
+          System.out.println("expected:" + expected);
+          System.out.println("actual:" + output.toString());
+          
+          throw e;
+        }
     }
 
     @Test
@@ -144,6 +155,17 @@ public class JunitQuizV2 {
         System.setOut(system_output);
 
         //ASSERTION: actual output is the same as expected output
-        assertTrue(expected.equals(output.toString()));
+        try{
+          assertTrue(expected.equals(output.toString()));
+          
+          System.out.println("expected:" + expected);
+          System.out.println("actual:" + output.toString());
+          
+        }catch(AssertionError e){
+          System.out.println("expected:" + expected);
+          System.out.println("actual:" + output.toString());
+          
+          throw e;
+        }
     }
 }
