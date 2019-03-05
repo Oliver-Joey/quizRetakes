@@ -78,7 +78,6 @@ public class quizschedule
     tOrS = scanner.next();
 
     if(tOrS.toLowerCase().equals("professor")){
-<<<<<<< HEAD
 	System.out.println("Welcome!");
 	
 	System.out.println("Enter course Id for class you wish to see retakes for: ");
@@ -86,34 +85,15 @@ public class quizschedule
 	
 	Professor pro = new Professor();
 	pro.displayRetakes(courseID);
-=======
 	System.out.println("Welcome to teacher mode");
+
 	Professor pro = new Professor();
 	pro.displayRetakes();
->>>>>>> baa75c531fb63c0761285042723a9cfcc04a1ccc
     }
     else if(tOrS.toLowerCase().equals("student")){
     	System.out.println("Input the course ID (Format:swe437): ");
     	courseID = scanner.next();
     	courseBean course = null;
-<<<<<<< HEAD
-=======
-
-    	Student stu = new Student();
-
-	stu.doGet(courseID);
-    }
-  }
-  
-protected static void doPost (String courseID, String studentName, String[] allIDs) {
-
-{
-   // No saving if IOException
-   boolean IOerrFlag = false;
-   String IOerrMessage = "";
-
-   // Filename to be built from above and the courseID
->>>>>>> baa75c531fb63c0761285042723a9cfcc04a1ccc
 
     	Student stu = new Student();
 
