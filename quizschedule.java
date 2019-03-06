@@ -75,29 +75,52 @@ public class quizschedule
     Scanner scanner = new Scanner(System.in);
     
     System.out.println("Hello!\nAre you a 'Professor' or 'Student'?\n");
-    tOrS = scanner.next();
-
-    if(tOrS.toLowerCase().equals("professor")){
-	System.out.println("Welcome!");
-	
-	System.out.println("Enter course Id for class you wish to see retakes for: ");
-	courseID = scanner.next();
-	
-	Professor pro = new Professor();
-	pro.displayRetakes(courseID);
-	System.out.println("Welcome to teacher mode");
-
-	Professor pro = new Professor();
-	pro.displayRetakes();
+    
+    if(args.length == 0)
+    {
+      tOrS = scanner.next();
     }
-    else if(tOrS.toLowerCase().equals("student")){
-    	System.out.println("Input the course ID (Format:swe437): ");
-    	courseID = scanner.next();
-    	courseBean course = null;
-
-    	Student stu = new Student();
-
-	stu.doGet(courseID);
+    else
+    {
+      tOrS = args[0];
+    }
+    
+    if(tOrS.toLowerCase().equals("professor"))
+    {
+      System.out.println("Enter course Id for class you wish to see retakes for: ");
+      if(args.length == 0)
+      {
+        courseID = scanner.next();
+      }
+      else
+      {
+        courseID = args[1];
+      }
+      Professor pro = new Professor();
+      pro.displayRetakes(courseID);
+    }
+    else if(tOrS.toLowerCase().equals("student"))
+    {
+      System.out.println("Input the course ID (Format:swe437): ");
+      courseID = scanner.next();
+      courseBean course = null;
+      
+      Student stu = new Student();
+      
+      stu.doGet(courseID);
+    }
+  }
+  
+  protected static void doPost (String courseID, String studentName, String[] allIDs) 
+  {
+    {
+      // No saving if IOException
+      boolean IOerrFlag = false;
+      String IOerrMessage = "";
+      
+      // Filename to be built from above and the courseID   
+      Student stu = new Student();
+      stu.doGet(courseID);
     }
   }
 }
