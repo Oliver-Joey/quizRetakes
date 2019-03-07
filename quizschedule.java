@@ -105,17 +105,25 @@ public class quizschedule
         "Option 2: Schedule new retake\n" +
         "Option 3: Display retakes and quiz schedules\n" +
         "Option 4: Exit program\n\n");
+        
         hold = scanner.nextInt();
         
         switch (hold) {
           case 1:
             Professor.scheduleQuiz(courseID);
+            break;
           case 2:
             Professor.scheduleRetake(courseID);
+            break;
           case 3:
             Professor.displayRetakes(courseID);
+            break;
+          case 4:
+            System.out.println("Good bye, Have a good day!\n");
+            break;
           default:
             System.out.println("Please enter a number 1-4");
+            break;
         }
       }
     }

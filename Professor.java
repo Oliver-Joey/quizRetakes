@@ -12,24 +12,24 @@ public class Professor {
     {
     }
 
-    protected static void displayRetakes(String courseID) {
+    public static void displayRetakes(String courseID) {
      Scanner scan = new Scanner(System.in);
- String in = dataLocation + apptsBase + "-" + courseID + ".txt";
-        File input = new File(in);
+     String in = dataLocation + apptsBase + "-" + courseID + ".txt";
+     File input = new File(in);
 
-        try {
-     System.out.println("Here is the current schedule of quiz retakes:\n");
-            Scanner fileScan = new Scanner(input);
-            int count = 1;
-            while (fileScan.hasNextLine()) {
-              String retake = fileScan.nextLine();
-                System.out.println(count + ". " + retake);
-                count++;
-     }
-     System.out.println("\nHave a nice day!");
-        } catch (FileNotFoundException e){
-            System.out.println("Oops I couldn't read the file...");
-        }
+     try {
+       System.out.println("Here is the current schedule of quiz retakes:\n");
+       Scanner fileScan = new Scanner(input);
+       int count = 1;
+       while (fileScan.hasNextLine()) {
+         String retake = fileScan.nextLine();
+         System.out.println(count + ". " + retake);
+         count++;
+       }
+       System.out.println("\nHave a nice day!");
+       } catch (FileNotFoundException e){
+         System.out.println("Oops I couldn't read the file...");
+       }
     }
     
     public static void scheduleQuiz(String courseID){
