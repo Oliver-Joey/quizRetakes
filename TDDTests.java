@@ -27,7 +27,7 @@ public class TDDTests
     args[1] = "SWE437"; 
       
     //Tests the professor's options functionality
-    quizretakes.quizschedule.main(args);
+    quizRetakes.quizschedule.main(args);
     
     System.out.flush();
     System.setOut(system_output);
@@ -36,6 +36,7 @@ public class TDDTests
     String expected = "";
     expected += "Hello!\n";
     expected += "Are you a 'Professor' or 'Student'?\n\n";
+    expected += "Enter course Id for class you wish to see retakes for: ";
     expected += "Welcome!\n";
     expected += "Here are a list of options:\n";
     expected += "Option 1: Schedule new quiz\n";

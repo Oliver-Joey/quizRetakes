@@ -87,6 +87,7 @@ public class quizschedule
     
     if(tOrS.toLowerCase().equals("professor"))
     {
+      System.out.println("Welcome!\n");
       System.out.println("Enter course Id for class you wish to see retakes for: ");
       if(args.length == 0)
       {
@@ -96,14 +97,32 @@ public class quizschedule
       {
         courseID = args[1];
       }
-      Professor pro = new Professor();
-      pro.displayRetakes(courseID);
+      int hold = 0;
+      
+      while(hold != 4){
+        System.out.println("Here are a list of options:\n" +
+        "Option 1: Schedule new quiz\n" +
+        "Option 2: Schedule new retake\n" +
+        "Option 3: Display retakes and quiz schedules\n" +
+        "Option 4: Exit program\n\n");
+        hold = scanner.nextInt();
+        
+        switch (hold) {
+          case 1:
+            Professor.scheduleQuiz(courseID);
+          case 2:
+            Professor.scheduleRetake(courseID);
+          case 3:
+            Professor.displayRetakes(courseID);
+          default:
+            System.out.println("Please enter a number 1-4");
+        }
+      }
     }
     else if(tOrS.toLowerCase().equals("student"))
     {
       System.out.println("Input the course ID (Format:swe437): ");
       courseID = scanner.next();
-      courseBean course = null;
       
       Student stu = new Student();
       
