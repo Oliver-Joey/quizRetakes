@@ -1,4 +1,3 @@
-// JO 3-Jan-2019
 package quizretakes;
 
 import java.io.IOException;
@@ -99,34 +98,39 @@ public class quizschedule
       }
       int hold = 0;
       
-      while(hold != 4){
-        System.out.println("Here are a list of options:\n" +
-        "Option 1: Schedule new quiz\n" +
-        "Option 2: Schedule new retake\n" +
-        "Option 3: Display retakes and quiz schedules\n" +
-        "Option 4: Exit program\n\n");
-        
+      System.out.println("Here are a list of options:\n" +
+                         "Option 1: Schedule new quiz\n" +
+                         "Option 2: Schedule new retake\n" +
+                         "Option 3: Display retakes and quiz schedules\n" +
+                         "Option 4: Exit program\n\n");
+      if(args.length == 0)
+      {
         hold = scanner.nextInt();
-        
-        switch (hold) {
-          case 1:
-            Professor.scheduleQuiz(courseID);
-            break;
-          case 2:
-            Professor.scheduleRetake(courseID);
-            break;
-          case 3:
-            Professor.displayRetakes(courseID);
-            break;
-          case 4:
-            System.out.println("Good bye, Have a good day!\n");
-            break;
-          default:
-            System.out.println("Please enter a number 1-4");
-            break;
-        }
       }
-    }
+      else
+      {
+        tOrS = args[2];
+      }
+      
+      if(hold == 1)
+      {
+        Professor.scheduleQuiz();
+      }
+      if(hold == 2)
+      {
+        Professor.scheduleRetake();
+      }
+      if(hold == 3)
+      {
+        Professor.displayRetakes(courseID);
+      }
+      if(hold == 4)
+      {
+        System.out.println("Good bye, Have a good day!\n");
+        return;
+      }
+      
+    } 
     else if(tOrS.toLowerCase().equals("student"))
     {
       System.out.println("Input the course ID (Format:swe437): ");
